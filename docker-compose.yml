@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+    
+  user-quote:
+    image: mirseit/user-quote
+    container_name: user-quote
+    ports:
+      - "8088:8088"
+    networks:
+      - quote network
+   
+  quote:
+    build:
+      dockerfile: ./Dockerfile
+      context: .
+    image: mirseit/user-quote
+    container_name: user-quote
+    ports:
+      - "8088:8088"
+    environment: 
+      - PORT=8088
+      - USER-QUOTE_CONTAINER=user-quote
+      - SPRING_PROFILES_ACTIVE=prod 
+    networks:
+      - user-quote-network
+    depends_on: 
+      - user-quote
+      
+networks:
+  user-quote-network:
+    driver: bridge
